@@ -14,9 +14,16 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { addProduct, getProducts, getCustomers, sellProduct, editProduct, deleteProduct } from "../services/apiMethods";
+import {
+  addProduct,
+  getProducts,
+  getCustomers,
+  sellProduct,
+  editProduct,
+  deleteProduct,
+} from "../services/apiMethods";
 import toast from "react-hot-toast";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 import { uploadImageToCloudinary } from "../hooks/cloudinary";
 
 const Products = () => {
@@ -38,7 +45,6 @@ const Products = () => {
     image: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
-  
 
   useEffect(() => {
     fetchProducts(page);
@@ -92,7 +98,9 @@ const Products = () => {
       return;
     }
     if (selectedProduct.quantity < quantity) {
-      toast.error("Please enter a quantity less than or equal to stock quantity.");
+      toast.error(
+        "Please enter a quantity less than or equal to stock quantity."
+      );
       return;
     }
 
@@ -132,7 +140,7 @@ const Products = () => {
         description: product.description,
         quantity: product.quantity,
         price: product.price,
-        image: product.image, 
+        image: product.image,
       });
       setSelectedProduct(product);
     } else {
@@ -153,29 +161,30 @@ const Products = () => {
     setSelectedProduct(null);
   };
   const itemsPerPage = 4;
-  const paginatedProducts = filteredProducts.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
   const handleAddOrEditProduct = async () => {
     try {
       let imgUrl = newProduct.image;
-  
-      if (typeof newProduct.image !== 'string') {
+
+      if (typeof newProduct.image !== "string") {
         imgUrl = await uploadImageToCloudinary(newProduct.image);
       } else if (!imgUrl && selectedProduct) {
         imgUrl = selectedProduct.image;
       }
-  
+
       const nameInUpper = newProduct.name.toUpperCase();
       const product = { ...newProduct, image: imgUrl, name: nameInUpper };
-  
+
       if (isEditing) {
-        // Handle updating product
         let updatedProduct = { ...selectedProduct, ...product };
-  
-        // If the image was changed, ensure the new image URL is passed
-        if (typeof newProduct.image !== 'string') {
+
+        if (typeof newProduct.image !== "string") {
           updatedProduct = { ...updatedProduct, image: imgUrl };
         }
-  
+
         const response = await editProduct(updatedProduct);
         if (response.status === 200) {
           setProducts((prevProducts) =>
@@ -186,7 +195,6 @@ const Products = () => {
           toast.success("Product Updated Successfully");
         }
       } else {
-        // Handle adding a new product
         const response = await addProduct(product);
         if (response.status === 200) {
           const createdProduct = response.data.product;
@@ -194,7 +202,7 @@ const Products = () => {
           toast.success("Product Added Successfully");
         }
       }
-  
+
       setOpenAdd(false);
       setNewProduct({
         name: "",
@@ -207,7 +215,7 @@ const Products = () => {
       toast.error(error?.response?.message || error?.message);
     }
   };
-  
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -215,26 +223,25 @@ const Products = () => {
     }
   };
 
-  // Function to handle product deletion with SweetAlert confirmation
   const handleDelete = (productId) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await deleteProduct({productId});
+          const response = await deleteProduct({ productId });
           if (response.status === 200) {
             setProducts((prevProducts) =>
               prevProducts.filter((product) => product._id !== productId)
             );
             toast.success("Product Deleted Successfully");
-            Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+            Swal.fire("Deleted!", "Your product has been deleted.", "success");
           }
         } catch (error) {
           toast.error(error?.response?.message || error?.message);
@@ -245,19 +252,19 @@ const Products = () => {
 
   return (
     <Box sx={{ padding: "20px", textAlign: "center" }}>
-      {/* Search Input */}
-      <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}
+      >
         <TextField
           label="Search Products"
           variant="outlined"
-          size="small" // Make the search bar smaller
+          size="small"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ width: "300px" }} // Adjust width as needed
+          sx={{ width: "300px" }}
         />
       </Box>
 
-      {/* Add Product Button */}
       <Button
         variant="contained"
         color="primary"
@@ -266,83 +273,101 @@ const Products = () => {
       >
         Add Product
       </Button>
-    
+
       <Grid container spacing={3} justifyContent="center">
-        {paginatedProducts.length>0?(paginatedProducts.map((product) => (
-          <Grid item xs={12} sm={6} md={3} key={product._id}>
-            <Card sx={{ maxWidth: 240 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image={product.image}
-                alt={product.name}
-              />
-              <CardContent>
-                <Typography variant="h6">{product.name}</Typography>
-                <Typography variant="body2">{product.description}</Typography>
-                <Typography variant="body1">Quantity: {product.quantity}</Typography>
-                <Typography variant="body1">Price: ₹{product.price}</Typography>
-              </CardContent>
-              <Grid container spacing={1} justifyContent="center" paddingBottom={2}>
-                {/* Sell Product Button */}
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleSell(product)}
-                  >
-                    Sell
-                  </Button>
+        {paginatedProducts.length > 0 ? (
+          paginatedProducts.map((product) => (
+            <Grid item xs={12} sm={6} md={3} key={product._id}>
+              <Card sx={{ maxWidth: 240 }}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={product.image}
+                  alt={product.name}
+                />
+                <CardContent>
+                  <Typography variant="h6">{product.name}</Typography>
+                  <Typography variant="body2">{product.description}</Typography>
+                  <Typography variant="body1">
+                    Quantity: {product.quantity}
+                  </Typography>
+                  <Typography variant="body1">
+                    Price: ₹{product.price}
+                  </Typography>
+                </CardContent>
+                <Grid
+                  container
+                  spacing={1}
+                  justifyContent="center"
+                  paddingBottom={2}
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleSell(product)}
+                    >
+                      Sell
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={() => handleOpenAdd(product)}
+                    >
+                      Edit
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Grid>
                 </Grid>
-                {/* Edit Product Button */}
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => handleOpenAdd(product)}
-                  >
-                    Edit
-                  </Button>
-                </Grid>
-                {/* Delete Product Button */}
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </Button>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>))):(<Grid item xs={12}>
-            <Typography variant="h6" align="center">No products found</Typography>
-          </Grid>)}
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <Typography variant="h6" align="center">
+              No products found
+            </Typography>
+          </Grid>
+        )}
       </Grid>
 
-      {/* Add/Edit Product Dialog */}
       <Dialog open={openAdd} onClose={handleCloseAdd}>
         <DialogTitle>{isEditing ? "Edit Product" : "Add Product"}</DialogTitle>
         <DialogContent>
           <TextField
             label="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             fullWidth
             margin="dense"
           />
           <TextField
             label="Description"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
             fullWidth
             margin="dense"
           />
           <TextField
             label="Quantity"
             value={newProduct.quantity}
-            onChange={(e) => setNewProduct({ ...newProduct, quantity: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, quantity: e.target.value })
+            }
             type="number"
             fullWidth
             margin="dense"
@@ -350,7 +375,9 @@ const Products = () => {
           <TextField
             label="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             type="number"
             fullWidth
             margin="dense"
@@ -365,7 +392,6 @@ const Products = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Sell Product Dialog */}
       <Dialog open={openSell} onClose={() => setOpenSell(false)}>
         <DialogTitle>Sell Product</DialogTitle>
         <DialogContent>
@@ -403,16 +429,16 @@ const Products = () => {
       </Dialog>
 
       <Box display="flex" justifyContent="center" mt={3}>
-      {filteredProducts.length > itemsPerPage && (
-        <Box sx={{ marginTop: "20px" }}>
-          <Pagination
-            count={Math.ceil(filteredProducts.length / itemsPerPage)}
-            page={page}
-            onChange={(event, value) => setPage(value)}
-             color="primary"
-          />
-        </Box>
-      )}
+        {filteredProducts.length > itemsPerPage && (
+          <Box sx={{ marginTop: "20px" }}>
+            <Pagination
+              count={Math.ceil(filteredProducts.length / itemsPerPage)}
+              page={page}
+              onChange={(event, value) => setPage(value)}
+              color="primary"
+            />
+          </Box>
+        )}
       </Box>
     </Box>
   );

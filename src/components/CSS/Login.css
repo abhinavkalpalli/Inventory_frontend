@@ -97,6 +97,24 @@
   .forgot-password a:hover {
     text-decoration: underline;
   }
+  .signup-link {
+    text-align: center; /* Center the text */
+    margin-top: 20px;   /* Add some space from the top */
+  }
+  
+  .signup-link p {
+    margin: 10px 0; /* Adds spacing between the paragraphs */
+  }
+  
+  .signup-link a {
+    color: #007BFF;   /* Blue color for links */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline; /* Add underline on hover */
+  }
+  
   
   /* Dark Mode */
   @media (prefers-color-scheme: dark) {

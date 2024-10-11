@@ -1,7 +1,6 @@
-import axios from 'axios'
+import axios from "axios";
 import { userAuth } from "../const/localStorage";
 import { BASE_URL } from "../const/url";
-
 
 export const api = axios.create({
   baseURL: `${BASE_URL}/api`,

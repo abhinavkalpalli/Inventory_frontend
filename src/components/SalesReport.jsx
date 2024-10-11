@@ -29,10 +29,10 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const blueColor = "#2172d2";
-const buttonColor = "#4CAF50"; // Button color
+const buttonColor = "#4CAF50";
 
 const SalesReportPage = () => {
-  const [date, setDate] = useState(dayjs()); // Set default date as current date
+  const [date, setDate] = useState(dayjs());
   const [productId, setProductId] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [email, setEmail] = useState("");
@@ -40,7 +40,7 @@ const SalesReportPage = () => {
   const [customers, setCustomers] = useState([]);
   const [salesReport, setSalesReport] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows per page for pagination
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     fetchProducts();
@@ -79,8 +79,8 @@ const SalesReportPage = () => {
         date: date ? dayjs(date).format("YYYY-MM-DD") : undefined,
         productId: productId || undefined,
         customerId: customerId || undefined,
-        page: page + 1, // Adjust for server-side pagination
-        limit: rowsPerPage, // Limit the number of rows fetched
+        page: page + 1,
+        limit: rowsPerPage,
       });
       setSalesReport(response.data.report);
     } catch (error) {
@@ -133,7 +133,6 @@ const SalesReportPage = () => {
     }
   };
 
-  // Pagination handlers
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -147,7 +146,6 @@ const SalesReportPage = () => {
     <div style={{ textAlign: "center" }}>
       <h2>Sales Report</h2>
 
-      {/* Date, Product, Customer Input and Action Buttons */}
       <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12} md={10}>
           <Box
@@ -156,7 +154,7 @@ const SalesReportPage = () => {
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
-              gap: "1rem", // Add spacing between items
+              gap: "1rem",
               mb: 2,
             }}
           >
@@ -300,11 +298,10 @@ const SalesReportPage = () => {
         </Table>
       </TableContainer>
 
-      {/* Pagination */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={salesReport.length} // Adjust count based on your total data length
+        count={salesReport.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

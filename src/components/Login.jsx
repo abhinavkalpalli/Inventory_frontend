@@ -1,69 +1,69 @@
-import React, { useState } from 'react';
-import './CSS/Login.css';
-import { login } from '../services/apiMethods';
-import toast from 'react-hot-toast';
-import { userAuth,refreshToken } from '../const/localStorage';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setReduxUser } from '../utils/reducers/userReducer';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import "./CSS/Login.css";
+import { login } from "../services/apiMethods";
+import toast from "react-hot-toast";
+import { userAuth, refreshToken } from "../const/localStorage";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setReduxUser } from "../utils/reducers/userReducer";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+  const userData = useSelector((state) => state?.user?.userData);
 
-    const navigate=useNavigate()
-    const dispatch=useDispatch()
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ email: '', password: '' });
-  const userData = useSelector((state)=> state?.user?.userData)
+  useEffect(() => {
+    if (userData) {
+      window.location.reload();
 
-
-  useEffect(()=>{
-    if(userData){
-      navigate('/user/dashboard')
+      navigate("/user/dashboard");
     }
-  },[userData])
-  // Email validation regex
+  }, [userData]);
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
   };
 
-  // Password validation regex (example: Abhinav@2000)
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let emailError = '';
-    let passwordError = '';
+    let emailError = "";
+    let passwordError = "";
 
     if (!validateEmail(email)) {
-      emailError = 'Please enter a valid email address';
+      emailError = "Please enter a valid email address";
     }
 
     if (!validatePassword(password)) {
-      passwordError = 'Password must include uppercase, lowercase, number, special character (e.g. Abhinav@2000)';
+      passwordError =
+        "Password must include uppercase, lowercase, number, special character (e.g. Abhinav@2000)";
     }
 
     if (emailError || passwordError) {
       setErrors({ email: emailError, password: passwordError });
     } else {
-        try {
-            const response=await login({email,password})
-            if(response.status===200){
-                localStorage.setItem(userAuth,response.data.tokens.accessToken)
-                localStorage.setItem(refreshToken, response.data.tokens.refreshToken);
-                dispatch(setReduxUser({ userData: response.data ,validUser:true}));
-                toast.success('Logined')
-                navigate('/user/dashboard')
-            }
-        } catch (error) {
-      toast.error(error?.response?.message || error?.message);
+      try {
+        const response = await login({ email, password });
+        if (response.status === 200) {
+          localStorage.setItem(userAuth, response.data.tokens.accessToken);
+          localStorage.setItem(refreshToken, response.data.tokens.refreshToken);
+          dispatch(setReduxUser({ userData: response.data, validUser: true }));
+          toast.success("Logined");
+          navigate("/user/dashboard");
         }
+      } catch (error) {
+        toast.error(error?.response?.message || error?.message);
+      }
     }
   };
 
@@ -101,6 +101,9 @@ const Login = () => {
         <div className="signup-link">
           <p>
             Don't have an account? <a href="/signup">Sign up here</a>
+          </p>
+          <p>
+            Forgot Password <a href="/forgotPassword">Sign up here</a>
           </p>
         </div>
       </div>

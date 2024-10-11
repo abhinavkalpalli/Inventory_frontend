@@ -1,0 +1,72 @@
+body {
+    background: #020007;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: "Audiowide", sans-serif;
+  }
+  
+  .page-not-found {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  svg {
+    height: 50vh; /* Responsive height */
+    width: 100%;
+  }
+  
+  h2 {
+    color: #fff;
+    font-size: 4vw; /* Responsive font size */
+    letter-spacing: 10px;
+    opacity: 0;
+    text-transform: uppercase;
+    animation: text-flicker 3s linear infinite;
+  }
+  
+  @keyframes text-flicker {
+    0% {
+      opacity: 0.1;
+    }
+    2% {
+      opacity: 1;
+    }
+    8% {
+      opacity: 0.1;
+    }
+    9% {
+      opacity: 1;
+    }
+    12% {
+      opacity: 0.1;
+    }
+    20% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.3;
+    }
+    30% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0.1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    svg {
+      height: 40vh; /* Adjust for smaller screens */
+    }
+  
+    h2 {
+      font-size: 6vw; /* Adjust font size for smaller screens */
+    }
+  }
+  

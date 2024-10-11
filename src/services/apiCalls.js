@@ -1,24 +1,21 @@
-import { api } from './api'
-import { userAuth, refreshToken } from '../const/localStorage';
-import { persistor } from '../app/store';
-import { BASE_URL } from '../const/url';
-import axios from 'axios';
+import { api } from "./api";
+import { userAuth, refreshToken } from "../const/localStorage";
+import { persistor } from "../app/store";
+import { BASE_URL } from "../const/url";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 
-
-// Function to clear user data and navigate to login
-
-export const clearUser = async() => {
+export const clearUser = async () => {
   localStorage.removeItem(userAuth);
   persistor.purge();
   await Swal.fire({
-    title: 'Blocked',
-    text: 'You are blocked by Admin',
-    icon: 'error',
-    confirmButtonText: 'OK'
+    title: "Blocked",
+    text: "You are blocked by Admin",
+    icon: "error",
+    confirmButtonText: "OK",
   });
-  window.location.reload("/login");
+  window.location.reload("/");
 };
 
 // Function to make API calls with retry logic for token refresh
@@ -30,33 +27,43 @@ export const apiCall = async (method, url, data) => {
 
       // Determine HTTP method for request
       switch (method) {
-        case 'post':
-          response = await api.post(url, data).catch((err) => { error = err; });
+        case "post":
+          response = await api.post(url, data).catch((err) => {
+            error = err;
+          });
           break;
-        case 'get':
-          response = await api.get(url, data).catch((err) => { error = err; });
+        case "get":
+          response = await api.get(url, data).catch((err) => {
+            error = err;
+          });
           break;
-        case 'patch':
-          response = await api.patch(url, data).catch((err) => { error = err; });
+        case "patch":
+          response = await api.patch(url, data).catch((err) => {
+            error = err;
+          });
           break;
-        case 'delete':
-          response = await api.delete(url, data).catch((err) => { error = err; });
+        case "delete":
+          response = await api.delete(url, data).catch((err) => {
+            error = err;
+          });
           break;
-        case 'put':
-          response = await api.put(url, data).catch((err) => { error = err; });
+        case "put":
+          response = await api.put(url, data).catch((err) => {
+            error = err;
+          });
           break;
         default:
-          throw new Error('Invalid HTTP method');
+          throw new Error("Invalid HTTP method");
       }
 
       // Handle response or error
       if (response) {
         resolve(response);
       } else if (error) {
-        console.log('Error response:', error);
+        console.log("Error response:", error);
 
         // Handle forbidden error
-        if (error?.response?.status === 403 ) {
+        if (error?.response?.status === 403) {
           localStorage.setItem(userAuth, "");
           localStorage.setItem(refreshToken, "");
           clearUser();
@@ -75,7 +82,7 @@ export const apiCall = async (method, url, data) => {
             }
           }
         } else {
-          reject(error?.response?.data||error.message);
+          reject(error?.response?.data || error.message);
         }
       }
     } catch (err) {
@@ -97,25 +104,20 @@ const refreshAccessToken = async (error) => {
           try {
             //refreshing the access token
             const response = await axios
-              .post(
-                `${BASE_URL}/api/auth/user/refresh-token`,
-                null,
-                {
-                  headers: {
-                    Authorization: tokenRefresh,
-                  },
-                }
-              )
+              .post(`${BASE_URL}/api/auth/user/refresh-token`, null, {
+                headers: {
+                  Authorization: tokenRefresh,
+                },
+              })
               .catch((err) => {
                 reject(err);
               });
-            if(response){
+            if (response) {
               const newAccessToken = response.data.newToken;
               localStorage.setItem(userAuth, newAccessToken);
 
               //calling the original request
               error.config.headers["Authorization"] = newAccessToken;
-
 
               axios(error.config)
                 .then((response) => {
@@ -128,12 +130,12 @@ const refreshAccessToken = async (error) => {
           } catch (refreshError) {
             reject(refreshError);
           }
-        })
+        });
       } else {
         clearUser();
       }
     }
   } catch (error) {
-    clearUser()
+    clearUser();
   }
-}
+};

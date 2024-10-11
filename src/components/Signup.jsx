@@ -1,62 +1,70 @@
-import React, { useState } from 'react';
-import './CSS/Signup.css';
+import React, { useState } from "react";
+import "./CSS/Signup.css";
 import toast from "react-hot-toast";
-import { register } from '../services/apiMethods';
-import { useNavigate } from 'react-router-dom';
-
+import { register } from "../services/apiMethods";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
-  const [errors, setErrors] = useState({ email: '', password: '', rePassword: '' });
-  const navigate=useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    rePassword: "",
+  });
+  const navigate = useNavigate();
 
-  // Email validation regex
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
   };
 
-  // Password validation regex (example: Abhinav@2000)
   const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let emailError = '';
-    let passwordError = '';
-    let rePasswordError = '';
+    let emailError = "";
+    let passwordError = "";
+    let rePasswordError = "";
 
     if (!validateEmail(email)) {
-      emailError = 'Please enter a valid email address';
+      emailError = "Please enter a valid email address";
     }
 
     if (!validatePassword(password)) {
-      passwordError = 'Password must include uppercase, lowercase, number, special character (e.g. Abhinav@2000)';
+      passwordError =
+        "Password must include uppercase, lowercase, number, special character (e.g. Abhinav@2000)";
     }
 
     if (password !== rePassword) {
-      rePasswordError = 'Passwords do not match';
+      rePasswordError = "Passwords do not match";
     }
 
     if (emailError || passwordError || rePasswordError) {
-      setErrors({ email: emailError, password: passwordError, rePassword: rePasswordError });
+      setErrors({
+        email: emailError,
+        password: passwordError,
+        rePassword: rePasswordError,
+      });
     } else {
       try {
-        const response=await register({email,password})
-        if(response.status===201){
-            const {email,otp}=response.data
-            toast.success(`${email}`)
-            navigate('/Otpverification',{state:{email,otp}})
-        }else{
-            toast.error(response.message)
+        const response = await register({ email, password });
+        if (response.status === 201) {
+          const { email, otp } = response.data;
+          toast.success(`${email}`);
+          navigate("/Otpverification", { state: { email, otp } });
+        } else {
+          toast.error(response.message);
         }
       } catch (error) {
-      toast.error(error?.response?.message || error?.message || "An error occurred");
-        
+        toast.error(
+          error?.response?.message || error?.message || "An error occurred"
+        );
       }
     }
   };

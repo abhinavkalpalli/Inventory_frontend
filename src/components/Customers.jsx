@@ -66,12 +66,10 @@ const CustomersPage = () => {
     }
   };
 
-  // Filter customers based on search term
   const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Handle pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -101,13 +99,12 @@ const CustomersPage = () => {
           <TextField
             label="Search Products"
             variant="outlined"
-            size="small" // Make the search bar smaller
+            size="small"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ width: "300px" }} // Adjust width as needed
+            sx={{ width: "300px" }}
           />
         </Box>
-        {/* Add Customer Button */}
         <Button
           variant="contained"
           color="primary"
@@ -116,8 +113,6 @@ const CustomersPage = () => {
         >
           Add Customer
         </Button>
-
-        {/* Search Bar */}
       </Box>
 
       <TableContainer component={Paper}>
@@ -157,7 +152,6 @@ const CustomersPage = () => {
         </Table>
       </TableContainer>
 
-      {/* Pagination */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
@@ -168,7 +162,6 @@ const CustomersPage = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {/* Add Customer Modal */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add New Customer</DialogTitle>
         <DialogContent>

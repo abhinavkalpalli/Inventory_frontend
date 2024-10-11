@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-import './CSS/ForgotPassword.css'; // Ensure you use the correct CSS file
+import React, { useState } from "react";
+import "./CSS/ForgotPassword.css";
 import toast from "react-hot-toast";
-import { forgotPassword } from '../services/apiMethods';
-import { useNavigate } from 'react-router-dom';
+import { forgotPassword } from "../services/apiMethods";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Email validation regex
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
@@ -17,23 +16,27 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Reset error
+    setError("");
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
+      setError("Please enter a valid email address");
       return;
     }
 
     try {
       const response = await forgotPassword({ email });
       if (response.status === 200) {
-        const {email,otp}=response.data
-        navigate('/Otpverification',{state:{email,otp,forgotPassword:true}}); 
+        const { email, otp } = response.data;
+        navigate("/Otpverification", {
+          state: { email, otp, forgotPassword: true },
+        });
       } else {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error(error?.response?.message || error?.message || "An error occurred");
+      toast.error(
+        error?.response?.message || error?.message || "An error occurred"
+      );
     }
   };
 

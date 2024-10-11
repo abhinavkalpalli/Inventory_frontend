@@ -1,34 +1,33 @@
-// src/components/OtpInput.js
-import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import './CSS/OtpInput.css'
+import React, { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+import "./CSS/OtpInput.css";
 
 const OtpInput = ({ length, onChangeOtp }) => {
-  const [otp, setOtp] = useState(new Array(length).fill(''));
+  const [otp, setOtp] = useState(new Array(length).fill(""));
   const inputsRef = useRef([]);
 
   useEffect(() => {
-    onChangeOtp(otp.join(''));
+    onChangeOtp(otp.join(""));
   }, [otp, onChangeOtp]);
 
   const handleChange = (e, index) => {
     const value = e.target.value;
 
-    if (/^[0-9]$/.test(value) || value === '') {
+    if (/^[0-9]$/.test(value) || value === "") {
       setOtp((prevOtp) => {
         const newOtp = [...prevOtp];
         newOtp[index] = value;
         return newOtp;
       });
 
-      if (value !== '' && index < length - 1) {
+      if (value !== "" && index < length - 1) {
         inputsRef.current[index + 1].focus();
       }
     }
   };
 
   const handleKeyDown = (e, index) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputsRef.current[index - 1].focus();
     }
   };
