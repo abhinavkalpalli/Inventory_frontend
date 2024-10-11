@@ -1,0 +1,22 @@
+/* src/components/OtpInput.css */
+
+.otp-input {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .otp-input__field {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .otp-input__field:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 4px #007bff;
+  }
+  

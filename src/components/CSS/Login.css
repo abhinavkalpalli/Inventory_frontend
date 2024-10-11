@@ -1,0 +1,145 @@
+/* Default Light Theme */
+:root {
+    --background-color: #f4f7f6;
+    --text-color: #333;
+    --input-background: white;
+    --input-border: #ccc;
+    --input-focus-border: #007bff;
+    --btn-background: #007bff;
+    --btn-hover-background: #0056b3;
+    --link-color: #007bff;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-color);
+  }
+  
+  .login-box {
+    background-color: var(--input-background);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .input-group {
+    margin-bottom: 1.2rem;
+  }
+  
+  label {
+    font-size: 14px;
+    color: var(--text-color);
+  }
+  
+  input[type='email'],
+  input[type='password'] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 0.5rem;
+    box-sizing: border-box;
+    color: white; /* Text inside the input fields is now white */
+  }
+  
+  input[type='email']:focus,
+  input[type='password']:focus {
+    border-color: var(--input-focus-border);
+    outline: none;
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--btn-background);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .login-btn:hover {
+    background-color: var(--btn-hover-background);
+  }
+  
+  .forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .forgot-password a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #121212;
+      --text-color: #ffffff;
+      --input-background: #1e1e1e;
+      --input-border: #333;
+      --input-focus-border: #64b5f6;
+      --btn-background: #64b5f6;
+      --btn-hover-background: #42a5f5;
+      --link-color: #64b5f6;
+    }
+  
+    input[type='email'],
+    input[type='password'] {
+      color: white; /* Ensures the input text is white in dark mode too */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .login-box {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .login-box {
+      padding: 1rem;
+      width: 90%;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    input[type='email'],
+    input[type='password'] {
+      font-size: 14px;
+    }
+  
+    .login-btn {
+      font-size: 14px;
+    }
+  }
+  
