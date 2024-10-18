@@ -1,1 +1,1 @@
-export const BASE_URL='http://localhost:3200'
+export const BASE_URL='https://stockflow.website'

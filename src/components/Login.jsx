@@ -19,8 +19,6 @@ const Login = () => {
 
   useEffect(() => {
     if (userData) {
-      window.location.reload();
-
       navigate("/user/dashboard");
     }
   }, [userData]);
