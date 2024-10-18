@@ -58,6 +58,7 @@ const Login = () => {
           dispatch(setReduxUser({ userData: response.data, validUser: true }));
           toast.success("Logined");
           navigate("/user/dashboard");
+          window.location.reload()
         }
       } catch (error) {
         toast.error(error?.response?.message || error?.message);
