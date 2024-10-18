@@ -19,7 +19,7 @@ const InventoryDashboard = () => {
     <Box sx={{ display: "flex", justifyContent: "center", padding: "20px" }}>
       <Grid container direction="column" alignItems="center" spacing={2}>
         <Grid item>
-          <h1>Inventory Dashboard</h1>
+          <h1>StockFlow Dashboard</h1>
         </Grid>
 
         <Grid item>
